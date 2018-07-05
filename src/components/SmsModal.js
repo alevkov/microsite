@@ -19,45 +19,45 @@ export default class SmsModal extends Component {
 		super(props);
 
 		this.state = {
-	  	  recepient: this.props.smsRecepient,
-	  	  sms: this.props.smsBody
-	    }
+  	  recepient: this.props.smsRecepient,
+  	  sms: this.props.smsBody
+	  }
 
-	    this.handleRecepientChange = this.handleRecepientChange.bind(this);
-	    this.handleTextBodyChange = this.handleTextBodyChange.bind(this);
-	    this.handleSmsSubmit = this.handleSmsSubmit.bind(this);
+    this.handleRecepientChange = this.handleRecepientChange.bind(this);
+    this.handleTextBodyChange = this.handleTextBodyChange.bind(this);
+    this.handleSmsSubmit = this.handleSmsSubmit.bind(this);
 	}
 
-    handleRecepientChange(event) {
-      this.setState({recepient: event.target.value});
-    }
-    handleTextBodyChange(event) {
-      this.setState({smsText: event.target.value});
-    }
+  handleRecepientChange(event) {
+    this.setState({recepient: event.target.value});
+  }
+  handleTextBodyChange(event) {
+    this.setState({smsText: event.target.value});
+  }
 
-    handleSmsSubmit(event) {
-      const smsData = {
-        smsBody: this.state.sms,
-        smsRecepient: this.state.recepient
-      }
-      console.log(smsData);
-      axios({
-	    method: 'post',
-	    url: 'http://localhost:8080/messaging/send',
-	    headers: {
-	      'Content-Type': 'application/x-www-form-urlencoded'
-	    },
-	    data: Querystring.stringify(smsData)
-	    }).then(response => {
-	      console.log(response);
-	    })
-	    .catch(error => {
-	    throw(error);
-	    });
-	  event.preventDefault();
+  handleSmsSubmit(event) {
+    const smsData = {
+      smsBody: this.state.sms,
+      smsRecepient: this.state.recepient
     }
+    console.log(smsData);
+    axios({
+    method: 'post',
+    url: 'http://localhost:8080/messaging/send',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    data: Querystring.stringify(smsData)
+    }).then(response => {
+      console.log(response);
+    })
+    .catch(error => {
+    throw(error);
+    });
+  event.preventDefault();
+  }
 
-    render () {
+  render () {
 	  const formStyles = {
     	display: 'block',
     	width:100,
@@ -78,20 +78,20 @@ export default class SmsModal extends Component {
 	  	margin:10
 	  }
 
-      return (
-      	<div>
-      	  <Rodal width="600" visible={this.props.isShown} onClose={this.props.handleClose}>
-      	  	<form style={formStyles} onSubmit={this.handleSmsSubmit}>
-      	  	  <InputLabel id="recepient-label" style={inputStyles}>phone #</InputLabel>
-          	  <TextField id="recepient-field" style={phoneTextFieldStyles} defaultValue={this.props.smsRecepient} onChange={this.handleRecepientChange} />
-          	  <InputLabel id="sms-label" style={inputStyles}>text</InputLabel>
-          	  <TextField id="sms-field" style={smsTextFieldStyles} defaultValue={this.props.smsBody} onChange={this.handleTextBodyChange} />
-          	  <Button type="submit" variant="contained" color="primary">
-        		Send
-      		  </Button>
-      	  	</form>
-          </Rodal>
-        </div>
-      );
-    }
+    return (
+    	<div>
+    	  <Rodal width="600" visible={this.props.isShown} onClose={this.props.handleClose}>
+    	  	<form style={formStyles} onSubmit={this.handleSmsSubmit}>
+    	  	  <InputLabel id="recepient-label" style={inputStyles}>phone #</InputLabel>
+        	  <TextField id="recepient-field" style={phoneTextFieldStyles} defaultValue={this.props.smsRecepient} onChange={this.handleRecepientChange} />
+        	  <InputLabel id="sms-label" style={inputStyles}>text</InputLabel>
+        	  <TextField id="sms-field" style={smsTextFieldStyles} defaultValue={this.props.smsBody} onChange={this.handleTextBodyChange} />
+        	  <Button type="submit" variant="contained" color="primary">
+      		Send
+    		  </Button>
+    	  	</form>
+        </Rodal>
+      </div>
+    );
+  }
 }

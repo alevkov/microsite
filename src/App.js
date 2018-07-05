@@ -2,22 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // assets
 import logo from './svg/logo.svg';
-import smsButtonSvg from './svg/sms_48px.svg';
-import emailButtonSvg from './svg/email.svg';
-import FacebookBox from 'material-ui-community-icons/icons/facebook-box';
-import TwitterBox from 'material-ui-community-icons/icons/twitter-box';
 // styles
 import './App.css';
-import 'rodal/lib/rodal.css';
 // components
 import Button from '@material-ui/core/Button';
 import Gallery from '../src/components/Gallery';
 import SmsModal from '../src/components/SmsModal';
 import CheckButton from '../src/components/CheckButton';
-import IconButton from '@material-ui/core/IconButton';
-import Icon from '@material-ui/core/Icon';
-import Dock from 'react-dock';
-import Rodal from 'rodal';
+import SharingDock from '../src/components/SharingDock';
 // helpers
 import shuffle from 'shuffle-array';
 
@@ -111,6 +103,7 @@ class App extends React.Component {
     }
 
     render () {
+      console.log("Show: " + (this.getSelectedImages().length!=0));
       const sharingListStyles = {
         display:'flex',
         padding:0,
@@ -131,7 +124,7 @@ class App extends React.Component {
         width: 40,
         height: 40
       }
-
+      
       return (
         <div>
           <CheckButton
@@ -154,35 +147,7 @@ class App extends React.Component {
           images={this.state.images}
           onSelectImage={this.onSelectImage}
           showLightboxThumbnails={true}/>
-          <Dock
-          size='0.13'
-          position='bottom' 
-          dimMode='none'
-          dockStyle={dockStyles}
-          isVisible={this.getSelectedImages().length!=0}>
-            <ul style={sharingListStyles}>
-              <li style={sharingButtonStyles}>
-                <IconButton onClick={this.toggleSmsModal}>
-                  <img src={smsButtonSvg} width="40"/>
-                </IconButton>
-              </li>
-              <li style={sharingButtonStyles}>
-                <IconButton>
-                  <img src={emailButtonSvg} width="40"/>
-                </IconButton>
-              </li>
-              <li style={sharingButtonStyles}>
-                <IconButton>
-                  <FacebookBox style={dockIconStyles} />
-                </IconButton>
-              </li>
-              <li style={sharingButtonStyles}>
-                <IconButton>
-                  <TwitterBox style={dockIconStyles} />
-                </IconButton>
-              </li>
-            </ul>
-          </Dock>
+          <SharingDock showDock={this.getSelectedImages().length!=0} toggleSms={this.toggleSmsModal}/>
           <SmsModal 
           isShown={this.state.showSmsModal} 
           handleClose={this.toggleSmsModal}
