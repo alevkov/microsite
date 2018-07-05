@@ -34,6 +34,7 @@ export default class SharingDock extends React.Component {
       width: 40,
       height: 40
     }
+    
     return (
         <Dock
           size='0.13'
