@@ -103,6 +103,28 @@ class App extends React.Component {
     }
 
     render () {
+      console.log("Show: " + (this.getSelectedImages().length!=0));
+      const sharingListStyles = {
+        display:'flex',
+        padding:0,
+        textAlign: 'center',
+        justifyContent: 'center'
+      }
+
+      const sharingButtonStyles = {
+        listStyleType: 'none'
+      }
+
+      const dockStyles = {
+        backgroundColor: "rgba(0.4,0.4,0.4,0.54)"
+      }
+
+      const dockIconStyles = {
+        color: "white",
+        width: 40,
+        height: 40
+      }
+      
       return (
         <div>
           <CheckButton
