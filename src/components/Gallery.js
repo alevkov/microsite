@@ -30,7 +30,7 @@ class Gallery extends Component {
     }
 
     componentWillReceiveProps (np) {
-        if(this.state.images != np.images || this.props.maxRows != np.maxRows){
+        if(this.state.images !== np.images || this.props.maxRows !== np.maxRows){
             this.setState({
                 images: np.images,
                 thumbnails: this.renderThumbs(this._gallery.clientWidth,
@@ -205,7 +205,7 @@ class Gallery extends Component {
 
     renderThumbs (containerWidth, images = this.state.images) {
         if (!images) return [];
-        if (containerWidth == 0) return [];
+        if (containerWidth === 0) return [];
 
         var items = images.slice();
         for (var t in items) {

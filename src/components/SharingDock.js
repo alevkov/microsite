@@ -16,7 +16,7 @@ export default class SharingDock extends React.Component {
   render() {
     const sharingListStyles = {
       display:'flex',
-      padding:0,
+      paddingTop:20,
       textAlign: 'center',
       justifyContent: 'center'
     }
@@ -37,7 +37,7 @@ export default class SharingDock extends React.Component {
     
     return (
         <Dock
-          size='0.13'
+          size={0.13}
           position='bottom' 
           dimMode='none'
           dockStyle={dockStyles}

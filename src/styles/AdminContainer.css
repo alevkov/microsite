@@ -1,0 +1,11 @@
+.AdminContainer {
+  text-align: left;
+}
+
+.AdminContainer label {
+  color: #eee;
+}
+
+#eventId {
+  width: 200px;
+}

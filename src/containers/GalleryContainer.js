@@ -1,19 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// assets
-import logo from './svg/logo.svg';
 // styles
-import './App.css';
+import '../App.css';
 // components
-import Button from '@material-ui/core/Button';
-import Gallery from '../src/components/Gallery';
-import SmsModal from '../src/components/SmsModal';
-import CheckButton from '../src/components/CheckButton';
-import SharingDock from '../src/components/SharingDock';
+import Gallery from '../components/Gallery';
+import SmsModal from '../components/SmsModal';
+import CheckButton from '../components/CheckButton';
+import SharingDock from '../components/SharingDock';
 // helpers
 import shuffle from 'shuffle-array';
 
-class App extends React.Component {
+class GalleryContainer extends React.Component {
     constructor(props){
         super(props);
 
@@ -33,10 +30,10 @@ class App extends React.Component {
     allImagesSelected (images) {
         var f = images.filter(
             function (img) {
-                return img.isSelected == true;
+                return img.isSelected === true;
             }
         );
-        return f.length == images.length;
+        return f.length === images.length;
     }
 
     toggleSmsModal () {
@@ -76,7 +73,7 @@ class App extends React.Component {
     getSelectedImages () {
         var selected = [];
         for(var i = 0; i < this.state.images.length; i++)
-            if(this.state.images[i].isSelected == true)
+            if(this.state.images[i].isSelected === true)
                 selected.push(i);
         return selected;
     }
@@ -93,8 +90,8 @@ class App extends React.Component {
                 images[i].isSelected = true;
         }
         else {
-            for(var i = 0; i < this.state.images.length; i++)
-                images[i].isSelected = false;
+            for(var j= 0; j < this.state.images.length; j++)
+                images[j].isSelected = false;
 
         }
         this.setState({
@@ -103,28 +100,6 @@ class App extends React.Component {
     }
 
     render () {
-      console.log("Show: " + (this.getSelectedImages().length!=0));
-      const sharingListStyles = {
-        display:'flex',
-        padding:0,
-        textAlign: 'center',
-        justifyContent: 'center'
-      }
-
-      const sharingButtonStyles = {
-        listStyleType: 'none'
-      }
-
-      const dockStyles = {
-        backgroundColor: "rgba(0.4,0.4,0.4,0.54)"
-      }
-
-      const dockIconStyles = {
-        color: "white",
-        width: 40,
-        height: 40
-      }
-      
       return (
         <div>
           <CheckButton
@@ -147,7 +122,7 @@ class App extends React.Component {
           images={this.state.images}
           onSelectImage={this.onSelectImage}
           showLightboxThumbnails={true}/>
-          <SharingDock showDock={this.getSelectedImages().length!=0} toggleSms={this.toggleSmsModal}/>
+          <SharingDock showDock={this.getSelectedImages().length!==0} toggleSms={this.toggleSmsModal}/>
           <SmsModal 
           isShown={this.state.showSmsModal} 
           handleClose={this.toggleSmsModal}
@@ -159,7 +134,7 @@ class App extends React.Component {
     }
 }
 
-App.propTypes = {
+GalleryContainer.propTypes = {
     images: PropTypes.arrayOf(
         PropTypes.shape({
             src: PropTypes.string.isRequired,
@@ -173,7 +148,7 @@ App.propTypes = {
     ).isRequired
 };
 
-App.defaultProps = {
+GalleryContainer.defaultProps = {
     images: shuffle([
         {
             src: "https://c2.staticflickr.com/9/8817/28973449265_07e3aa5d2e_b.jpg",
@@ -358,4 +333,4 @@ App.defaultProps = {
     ]).splice(0,16)
 };
 
-export default App;
+export default GalleryContainer;
