@@ -151,7 +151,7 @@ class Gallery extends Component {
         var cutsum = 0;
         for(var i in items) {
             var item = items[i];
-            var fractOfLen = item.scaletwidth / len;
+            var fractOfLen = item.scaledWidth / len;
             cutoff[i] = Math.floor(fractOfLen * delta);
             cutsum += cutoff[i];
         }
@@ -174,7 +174,7 @@ class Gallery extends Component {
         while(items.length > 0 && len < containerWidth) {
             var item = items.shift();
             row.push(item);
-            len += (item.scaletwidth + imgMargin);
+            len += (item.scaledWidth + imgMargin);
         }
 
         var delta = len - containerWidth;
@@ -184,21 +184,21 @@ class Gallery extends Component {
                 var pixelsToRemove = cutoff[i];
                 item = row[i];
                 item.marginLeft = -Math.abs(Math.floor(pixelsToRemove / 2));
-                item.vwidth = item.scaletwidth - pixelsToRemove;
+                item.vwidth = item.scaledWidth - pixelsToRemove;
             }
         }
         else {
             for(var j in row) {
                 item = row[j];
                 item.marginLeft = 0;
-                item.vwidth = item.scaletwidth;
+                item.vwidth = item.scaledWidth;
             }
         }
         return row;
     }
 
     setThumbScale (item) {
-        item.scaletwidth =
+        item.scaledWidth =
             Math.floor(this.props.rowHeight
                        * (item.thumbnailWidth / item.thumbnailHeight));
     }
