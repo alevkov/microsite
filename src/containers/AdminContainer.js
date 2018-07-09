@@ -19,9 +19,9 @@ export default class AdminContainer extends Component {
 
   handleDeleteAllForEvent = event => {
     axios({
-      method: 'delete',
-      url: 'https://helios-api.herokuapp.com/events/'
-      + localStorage.getItem(constants.kEventId),
+      method: 'get',
+      url: 'https://helios-api.herokuapp.com/events/delete/'
+      + localStorage.getItem(constants.kEventId)
     })
     .then(response => {
       this.dialog.showAlert('All photos deleted!');
@@ -39,13 +39,17 @@ export default class AdminContainer extends Component {
           <FormGroup controlId="eventId" bSize="large">
             <ControlLabel>event code</ControlLabel>
             <FormControl
-             autoFocus
-             type="text"
-             onChange={this.handleEventIdChange}
-             defaultValue={localStorage.getItem("KEY_EVENT_ID")} />
+               autoFocus
+               type="text"
+               onChange={this.handleEventIdChange}
+               defaultValue={localStorage.getItem("KEY_EVENT_ID")} />
           </FormGroup>
         </form>
-        <Button bsStyle="danger" onClick={this.handleDeleteAllForEvent}>Delete All</Button>
+        <Button 
+          bsStyle="danger" 
+          onClick={this.handleDeleteAllForEvent}>
+          Delete All
+        </Button>
         <Dialog ref={(el) => { this.dialog = el }} />
       </div>
     );

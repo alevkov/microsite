@@ -16,7 +16,9 @@ class App extends React.Component {
       admin: true
     };
 
-    localStorage.setItem(constants.kEventId, "abc");
+    if (localStorage.getItem(constants.kEventId) === null) {
+      localStorage.setItem(constants.kEventId, "abc");
+    }
   }
 
   render() {

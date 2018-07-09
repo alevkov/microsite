@@ -39,10 +39,11 @@ class GalleryContainer extends React.Component {
   }
 
   componentDidMount() {
+    const url = 'https://helios-api.herokuapp.com/events/' + 
+    localStorage.getItem(constants.kEventId);
     axios({
       method: 'get',
-      url: 'https://helios-api.herokuapp.com/events/'
-      + localStorage.getItem(constants.kEventId),
+      url: url,
     }).then(response => {
       var newImages = []
       response.data.data.Items.forEach((element) => {
