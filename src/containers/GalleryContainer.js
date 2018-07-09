@@ -8,7 +8,6 @@ import Gallery from '../components/neptunian/Gallery';
 import SelectedImage from '../components/neptunian/SelectedImage';
 import Lightbox from 'react-images';
 import SmsModal from '../components/SmsModal';
-import CheckButton from '../components/CheckButton';
 import SharingDock from '../components/SharingDock';
 // helpers
 import shuffle from 'shuffle-array';
