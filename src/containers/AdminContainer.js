@@ -18,17 +18,18 @@ export default class AdminContainer extends Component {
   }
 
   handleDeleteAllForEvent = event => {
-    this.dialog.showAlert('All photos deleted!');
-    // axios({
-    //   method: 'delete',
-    //   url: 'https://helios-api.herokuapp.com/events/'
-    //   + localStorage.getItem(constants.kEventId),
-    // }).then(response => {
-    // })
-    // .catch(error => {
-    //  this.dialog.showAlert('Error! Contact your sysadmin. ' + error);
-    //   throw(error);
-    // });
+    axios({
+      method: 'delete',
+      url: 'https://helios-api.herokuapp.com/events/'
+      + localStorage.getItem(constants.kEventId),
+    })
+    .then(response => {
+      this.dialog.showAlert('All photos deleted!');
+    })
+    .catch(error => {
+      this.dialog.showAlert('Error! Contact your sysadmin. ' + error);
+      throw(error);
+    });
   }
 
   render () {
