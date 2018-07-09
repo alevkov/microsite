@@ -5,16 +5,21 @@ import { LinkContainer } from "react-router-bootstrap";
 import Routes from "./Routes";
 // styles
 import './App.css';
+// constants
+const constants = require('./constants');
 
 class App extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
 
     this.state = {
       admin: true
     };
+
+    localStorage.setItem(constants.kEventId, "abc");
   }
-  render () {
+
+  render() {
     return(
       <div className="App container">
         <Navbar fluid collapseOnSelect>

@@ -10,6 +10,8 @@ import SharingDock from '../components/SharingDock';
 // helpers
 import shuffle from 'shuffle-array';
 import axios from 'axios';
+// constants
+const constants = require('../constants');
 
 class GalleryContainer extends React.Component {
   constructor(props) {
@@ -31,7 +33,8 @@ class GalleryContainer extends React.Component {
   componentDidMount() {
     axios({
       method: 'get',
-      url: 'https://helios-api.herokuapp.com/events/abc',
+      url: 'https://helios-api.herokuapp.com/events/'
+      + localStorage.getItem(constants.kEventId),
     }).then(response => {
       var newImages = []
       response.data.data.Items.forEach((element) => {
@@ -72,7 +75,7 @@ class GalleryContainer extends React.Component {
     this.setState({ showSmsModal: false });
   }
 
-  onSelectImage (index, image) {
+  onSelectImage(index, image) {
     var images = this.state.images.slice();
     var img = images[index];
     if(img.hasOwnProperty("isSelected"))
@@ -96,7 +99,7 @@ class GalleryContainer extends React.Component {
     }
   }
 
-  getSelectedImages () {
+  getSelectedImages() {
     var selected = [];
     for(var i = 0; i < this.state.images.length; i++)
       if(this.state.images[i].isSelected === true)
@@ -104,7 +107,7 @@ class GalleryContainer extends React.Component {
     return selected;
   }
 
-  onClickSelectAll () {
+  onClickSelectAll() {
     var selectAllChecked = !this.state.selectAllChecked;
     this.setState({
       selectAllChecked: selectAllChecked
@@ -125,9 +128,10 @@ class GalleryContainer extends React.Component {
     });
   }
 
-  render () {
+  render() {
     return (
       <div>
+        {/* select all (admin only)
         <CheckButton
         index={0}
         isSelected={this.state.selectAllChecked}
@@ -144,6 +148,7 @@ class GalleryContainer extends React.Component {
         <div style={{
               padding: "2px",
               color: "#666"}}>Selected images: {this.getSelectedImages().toString()}</div>
+        */}
         <Gallery
         images={this.state.images}
         onSelectImage={this.onSelectImage}

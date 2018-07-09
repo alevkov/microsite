@@ -26,6 +26,7 @@ export default class SmsModal extends Component {
   handleRecepientChange(event) {
     this.setState({recepient: event.target.value});
   }
+  
   handleTextBodyChange(event) {
     this.setState({smsText: event.target.value});
   }
@@ -38,7 +39,7 @@ export default class SmsModal extends Component {
     console.log(smsData);
     axios({
       method: 'post',
-      url: 'http://localhost:8080/messaging/send',
+      url: 'https://helios-api.herokuapp.com/messaging/send',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },

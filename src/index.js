@@ -10,9 +10,9 @@ import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(
 	<MuiThemeProvider>
-  <Router>
-    <App />
-  </Router>,
+    <Router>
+      <App />
+    </Router>,
 	</MuiThemeProvider>, document.getElementById('root')
 );
 registerServiceWorker();
