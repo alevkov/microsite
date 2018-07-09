@@ -7,6 +7,10 @@ export default class AdminContainer extends Component {
     super(props)
   }
 
+  handleDeleteAllForEvent = event => {
+    // TODO...
+  }
+
   render () {
     return(
       <div className="AdminContainer">
@@ -19,6 +23,7 @@ export default class AdminContainer extends Component {
              value={this.props.eventId} />
           </FormGroup>
         </form>
+        <Button bsStyle="primary" onClick={this.handleDeleteAllForEvent}>Delete All</Button>
       </div>
     );
   }
