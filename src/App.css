@@ -22,6 +22,16 @@
   font-size: large;
 }
 
+.App .navbar-brand {
+  font-weight: bold;
+  font-family: "Quicksand";
+  color: #333;
+}
+
+.App ul {
+  font-family: "Quicksand";
+}
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

@@ -1,0 +1,11 @@
++@media all and (min-width: 600px) {
+  .SmsModal {
+    padding: 60px 0;
+  }
+
+  .SmsModal form {
+    margin: 0 auto;
+    max-width: 400px;
+    text-align: left;
+  }
+}

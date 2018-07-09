@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Rodal from 'rodal';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-// assets
-import logo from '../svg/logo.svg';
+import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 // styles
-import '../App.css';
 import 'rodal/lib/rodal.css';
+import '../styles/SmsModal.css';
 // api
 import axios from 'axios';
 import Querystring from 'querystring';
@@ -42,17 +37,17 @@ export default class SmsModal extends Component {
     }
     console.log(smsData);
     axios({
-    method: 'post',
-    url: 'http://localhost:8080/messaging/send',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    data: Querystring.stringify(smsData)
+      method: 'post',
+      url: 'http://localhost:8080/messaging/send',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      data: Querystring.stringify(smsData)
     }).then(response => {
       console.log(response);
     })
     .catch(error => {
-    throw(error);
+      throw(error);
     });
   event.preventDefault();
   }
@@ -64,32 +59,33 @@ export default class SmsModal extends Component {
     	flexWrap: 'wrap',
 	  }
 
-	  const phoneTextFieldStyles = {
-	  	margin:10
-	  }
-
-	  const smsTextFieldStyles = {
-	  	margin:10,
-	  	width:500,
-	  	height:100
-	  }
-
-	  const inputStyles = {
-	  	margin:10
-	  }
-
     return (
-    	<div>
-    	  <Rodal width="600" visible={this.props.isShown} onClose={this.props.handleClose}>
-    	  	<form style={formStyles} onSubmit={this.handleSmsSubmit}>
-    	  	  <InputLabel id="recepient-label" style={inputStyles}>phone #</InputLabel>
-        	  <TextField id="recepient-field" style={phoneTextFieldStyles} defaultValue={this.props.smsRecepient} onChange={this.handleRecepientChange} />
-        	  <InputLabel id="sms-label" style={inputStyles}>text</InputLabel>
-        	  <TextField id="sms-field" style={smsTextFieldStyles} defaultValue={this.props.smsBody} onChange={this.handleTextBodyChange} />
-        	  <Button type="submit" variant="contained" color="primary">
-      		Send
-    		  </Button>
-    	  	</form>
+    	<div className="SmsModal">
+    	  <Rodal width="600" height="270" visible={this.props.isShown} onClose={this.props.handleClose}>
+          <form onSubmit={this.handleSmsSubmit}>
+            <FormGroup controlId="recepient" bsSize="large">
+              <ControlLabel id="recepient-label">Phone</ControlLabel>
+              <FormControl
+                autoFocus
+                defaultValue={this.props.smsRecepient}
+                onChange={this.handleRecepientChange}
+              />
+            </FormGroup>
+            <FormGroup controlId="sms" bsSize="large">
+              <ControlLabel id="sms-label">Message</ControlLabel>
+              <FormControl
+                defaultValue={this.props.smsBody}
+                onChange={this.handleTextBodyChange}
+                type="text"
+              />
+            </FormGroup>
+            <Button
+              block
+              bsSize="large"
+              type="submit">
+              Send
+            </Button>
+          </form>
         </Rodal>
       </div>
     );
