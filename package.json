@@ -15,6 +15,7 @@
     "react-dom": "^16.4.0",
     "react-images": "^0.5.17",
     "react-router-bootstrap": "^0.24.4",
+    "react-router-dom": "^4.3.1",
     "rodal": "^1.6.3",
     "shuffle-array": "^1.0.1"
   },
