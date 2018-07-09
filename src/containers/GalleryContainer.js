@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Button } from "react-bootstrap";
 // styles
 import '../App.css';
 // components
@@ -20,6 +21,7 @@ class GalleryContainer extends React.Component {
     super(props);
 
     this.state = {
+      selectedImages: new Set(),
       images: this.props.images,
       showControlDock: true,
       showSmsModal: false,
@@ -30,6 +32,7 @@ class GalleryContainer extends React.Component {
     this.toggleSmsModal = this.toggleSmsModal.bind(this);
     this.closeLightbox = this.closeLightbox.bind(this);
     this.openLightbox = this.openLightbox.bind(this);
+    this.openLightboxButton = this.openLightboxButton.bind(this);
     this.gotoNext = this.gotoNext.bind(this);
     this.gotoPrevious = this.gotoPrevious.bind(this);
     this.selectPhoto = this.selectPhoto.bind(this);
@@ -67,6 +70,13 @@ class GalleryContainer extends React.Component {
     });
   }
 
+  openLightboxButton(event) {
+    this.setState({
+      currentImage: 0,
+      lightboxIsOpen: true,
+    });
+  }
+
   closeLightbox() {
     this.setState({
       currentImage: 0,
@@ -95,6 +105,11 @@ class GalleryContainer extends React.Component {
   selectPhoto(event, obj) {
     let photos = this.state.images;
     photos[obj.index].selected = !photos[obj.index].selected;
+    if (photos[obj.index].selected === true) {
+      this.state.selectedImages.add(obj.index);
+    } else {
+      this.state.selectedImages.delete(obj.index);
+    }
     this.setState({ photos: photos });
   }
 
@@ -114,8 +129,11 @@ class GalleryContainer extends React.Component {
       <div>
         <Gallery 
           photos={this.state.images}
-          onClick={this.openLightbox}
+          onClick={this.selectPhoto}
           ImageComponent={SelectedImage} />
+        <Button 
+          bsStyle="success" 
+          onClick={this.openLightboxButton}>Slideshow</Button>
         <Lightbox images={this.state.images}
           onClose={this.closeLightbox}
           onClickPrev={this.gotoPrevious}
@@ -123,7 +141,7 @@ class GalleryContainer extends React.Component {
           currentImage={this.state.currentImage}
           isOpen={this.state.lightboxIsOpen} />
         <SharingDock 
-          showDock={true} 
+          showDock={this.state.selectedImages.size !==0 } 
           toggleSms={this.toggleSmsModal} />
         <SmsModal 
           isShown={this.state.showSmsModal} 
