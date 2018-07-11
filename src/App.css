@@ -28,6 +28,10 @@
   color: #333;
 }
 
+.App .btn-success {
+  margin: 25px;
+}
+
 .App ul {
   font-family: "Quicksand";
 }

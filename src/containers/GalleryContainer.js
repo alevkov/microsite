@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Button } from "react-bootstrap";
 // styles
 import '../App.css';
 // components
-import Gallery from '../components/Gallery';
+import Gallery from '../components/neptunian/Gallery';
+import SelectedImage from '../components/neptunian/SelectedImage';
+import Lightbox from 'react-images';
 import SmsModal from '../components/SmsModal';
-import CheckButton from '../components/CheckButton';
 import SharingDock from '../components/SharingDock';
 // helpers
 import shuffle from 'shuffle-array';
@@ -18,32 +20,37 @@ class GalleryContainer extends React.Component {
     super(props);
 
     this.state = {
+      selectedImages: new Set(),
       images: this.props.images,
-      selectAllChecked: false,
       showControlDock: true,
-      showSmsModal: false
+      showSmsModal: false,
+      currentImage: 0,
+      selectAll: false
     };
 
-    this.onSelectImage = this.onSelectImage.bind(this);
-    this.getSelectedImages = this.getSelectedImages.bind(this);
-    this.onClickSelectAll = this.onClickSelectAll.bind(this);
     this.toggleSmsModal = this.toggleSmsModal.bind(this);
+    this.closeLightbox = this.closeLightbox.bind(this);
+    this.openLightbox = this.openLightbox.bind(this);
+    this.openLightboxButton = this.openLightboxButton.bind(this);
+    this.gotoNext = this.gotoNext.bind(this);
+    this.gotoPrevious = this.gotoPrevious.bind(this);
+    this.selectPhoto = this.selectPhoto.bind(this);
+    this.toggleSelect = this.toggleSelect.bind(this);
   }
 
   componentDidMount() {
+    const url = 'https://helios-api.herokuapp.com/events/' + 
+    localStorage.getItem(constants.kEventId);
     axios({
       method: 'get',
-      url: 'https://helios-api.herokuapp.com/events/'
-      + localStorage.getItem(constants.kEventId),
+      url: url,
     }).then(response => {
       var newImages = []
       response.data.data.Items.forEach((element) => {
         let image = {
           src: element["PhotoID"],
-          thumbnail: element["PhotoID"],
-          thumbnailWidth: 450,
-          thumbnailHeight: 300,
-          caption: ""
+          width: 3,
+          height: 2
         }
         newImages.push(image);
       });
@@ -56,13 +63,37 @@ class GalleryContainer extends React.Component {
     });
   }
 
-  allImagesSelected(images) {
-    var f = images.filter(
-      function (img) {
-        return img.isSelected === true;
-      }
-    );
-    return f.length === images.length;
+  openLightbox(event, obj) {
+    this.setState({
+      currentImage: obj.index,
+      lightboxIsOpen: true,
+    });
+  }
+
+  openLightboxButton(event) {
+    this.setState({
+      currentImage: 0,
+      lightboxIsOpen: true,
+    });
+  }
+
+  closeLightbox() {
+    this.setState({
+      currentImage: 0,
+      lightboxIsOpen: false,
+    });
+  }
+
+  gotoPrevious() {
+    this.setState({
+      currentImage: this.state.currentImage - 1,
+    });
+  }
+
+  gotoNext() {
+    this.setState({
+      currentImage: this.state.currentImage + 1,
+    });
   }
 
   toggleSmsModal() {
@@ -71,94 +102,52 @@ class GalleryContainer extends React.Component {
     })
   }
 
+  selectPhoto(event, obj) {
+    let photos = this.state.images;
+    photos[obj.index].selected = !photos[obj.index].selected;
+    if (photos[obj.index].selected === true) {
+      this.state.selectedImages.add(obj.index);
+    } else {
+      this.state.selectedImages.delete(obj.index);
+    }
+    this.setState({ photos: photos });
+  }
+
+  toggleSelect() {
+    let photos = this.state.images.map((photo, index) => {
+      return { ...photo, selected: !this.state.selectAll } 
+    });
+    this.setState({ photos: photos, selectAll: !this.state.selectAll });
+  }
+
   hideSmsModal() {
     this.setState({ showSmsModal: false });
-  }
-
-  onSelectImage(index, image) {
-    var images = this.state.images.slice();
-    var img = images[index];
-    if(img.hasOwnProperty("isSelected"))
-      img.isSelected = !img.isSelected;
-    else
-      img.isSelected = true;
-
-    this.setState({
-      images: images
-    });
-
-    if(this.allImagesSelected(images)){
-      this.setState({
-        selectAllChecked: true
-      });
-    }
-    else {
-      this.setState({
-        selectAllChecked: false
-      });
-    }
-  }
-
-  getSelectedImages() {
-    var selected = [];
-    for(var i = 0; i < this.state.images.length; i++)
-      if(this.state.images[i].isSelected === true)
-        selected.push(i);
-    return selected;
-  }
-
-  onClickSelectAll() {
-    var selectAllChecked = !this.state.selectAllChecked;
-    this.setState({
-      selectAllChecked: selectAllChecked
-    });
-
-    var images = this.state.images.slice();
-    if(selectAllChecked){
-      for(var i = 0; i < this.state.images.length; i++)
-        images[i].isSelected = true;
-    }
-    else {
-      for(var j= 0; j < this.state.images.length; j++)
-        images[j].isSelected = false;
-
-    }
-    this.setState({
-      images: images
-    });
   }
 
   render() {
     return (
       <div>
-        {/* select all (admin only)
-        <CheckButton
-        index={0}
-        isSelected={this.state.selectAllChecked}
-        onClick={this.onClickSelectAll}
-        parentHover={true}
-        color={"rgba(0,0,0,0.54)"}
-        selectedColor={"#4285f4"}
-        hoverColor={"rgba(0,0,0,0.54)"}/>
-        <div style={{
-              height: "36px",
-              display: "flex",
-              alignItems: "center",
-              color: "white"}}>select all</div>
-        <div style={{
-              padding: "2px",
-              color: "#666"}}>Selected images: {this.getSelectedImages().toString()}</div>
-        */}
-        <Gallery
-        images={this.state.images}
-        onSelectImage={this.onSelectImage}
-        showLightboxThumbnails={false}/>
-        <SharingDock showDock={this.getSelectedImages().length!==0} toggleSms={this.toggleSmsModal}/>
+        <Gallery 
+          photos={this.state.images}
+          onClick={this.selectPhoto}
+          ImageComponent={SelectedImage} />
+        <Button 
+          bsStyle="success" 
+          onClick={this.openLightboxButton}>Slideshow</Button>
+        <Lightbox images={this.state.images}
+          onClose={this.closeLightbox}
+          onClickPrev={this.gotoPrevious}
+          onClickNext={this.gotoNext}
+          currentImage={this.state.currentImage}
+          isOpen={this.state.lightboxIsOpen} />
+        <SharingDock 
+          showDock={this.state.selectedImages.size !==0 } 
+          toggleSms={this.toggleSmsModal} />
         <SmsModal 
-        isShown={this.state.showSmsModal} 
-        handleClose={this.toggleSmsModal}
-        smsRecepient="+19548042297"
-        smsBody="https://c2.staticflickr.com/9/8817/28973449265_07e3aa5d2e_b.jpg">
+          isShown={this.state.showSmsModal} 
+          handleClose={this.toggleSmsModal}
+          smsRecepient="+19548042297"
+          smsBody="https://c2.staticflickr.com/9/8817/28973449265_07e3aa5d2e_b.jpg">
         </SmsModal>
       </div>
     );
