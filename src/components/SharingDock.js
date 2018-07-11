@@ -16,21 +16,23 @@ export default class SharingDock extends React.Component {
   render() {
     const sharingListStyles = {
       display:'flex',
-      paddingTop:20,
       textAlign: 'center',
       justifyContent: 'center'
     }
 
     const sharingButtonStyles = {
-      listStyleType: 'none'
+      listStyleType: 'none',
+      padding: 20
     }
 
     const dockStyles = {
-      backgroundColor: "rgba(0.4,0.4,0.4,0.54)"
+      backgroundColor: "black",
+      opacity: 0.6
     }
 
     const dockIconStyles = {
       color: "white",
+      opacity: 1,
       width: 40,
       height: 40
     }
