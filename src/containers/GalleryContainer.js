@@ -133,7 +133,7 @@ class GalleryContainer extends React.Component {
           ImageComponent={SelectedImage} />
         <Button 
           bsStyle="success" 
-          onClick={this.openLightboxButton}>Slideshow</Button>
+          onClick={this.openLightboxButton}>Preview</Button>
         <Lightbox images={this.state.images}
           onClose={this.closeLightbox}
           onClickPrev={this.gotoPrevious}
