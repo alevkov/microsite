@@ -131,9 +131,6 @@ class GalleryContainer extends React.Component {
           photos={this.state.images}
           onClick={this.selectPhoto}
           ImageComponent={SelectedImage} />
-        <Button 
-          bsStyle="success" 
-          onClick={this.openLightboxButton}>Preview</Button>
         <Lightbox images={this.state.images}
           onClose={this.closeLightbox}
           onClickPrev={this.gotoPrevious}
@@ -149,6 +146,10 @@ class GalleryContainer extends React.Component {
           smsRecepient="+19548042297"
           smsBody="https://c2.staticflickr.com/9/8817/28973449265_07e3aa5d2e_b.jpg">
         </SmsModal>
+        <Button 
+          bsStyle="success" 
+          onClick={this.openLightboxButton}>Preview
+        </Button>
       </div>
     );
   }
