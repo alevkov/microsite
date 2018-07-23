@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Rodal from 'rodal';
+import Dialog from 'react-bootstrap-dialog'
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 // styles
 import 'rodal/lib/rodal.css';
@@ -45,9 +46,11 @@ export default class SmsModal extends Component {
       },
       data: Querystring.stringify(smsData)
     }).then(response => {
+      this.dialog.showAlert('Message send to recepient!');
       console.log(response);
     })
     .catch(error => {
+      this.dialog.showAlert('Error!' + error);
       throw(error);
     });
     event.preventDefault();
@@ -87,6 +90,7 @@ export default class SmsModal extends Component {
             </Button>
           </form>
         </Rodal>
+        <Dialog ref={(el) => { this.dialog = el }} />
       </div>
     );
   }
