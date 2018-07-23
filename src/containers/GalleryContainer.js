@@ -36,6 +36,8 @@ class GalleryContainer extends React.Component {
     this.gotoPrevious = this.gotoPrevious.bind(this);
     this.selectPhoto = this.selectPhoto.bind(this);
     this.toggleSelect = this.toggleSelect.bind(this);
+    this.generateSmsContentFromSelected = 
+      this.generateSmsContentFromSelected.bind(this);
   }
 
   componentDidMount() {
@@ -120,6 +122,16 @@ class GalleryContainer extends React.Component {
     this.setState({ photos: photos, selectAll: !this.state.selectAll });
   }
 
+  generateSmsContentFromSelected() {
+    let smsContent = "";
+    let photos = this.state.images;
+    this.state.selectedImages.forEach(i => {
+      smsContent += photos[i].src;
+      smsContent += '\n';
+    });
+    return smsContent;
+  }
+
   hideSmsModal() {
     this.setState({ showSmsModal: false });
   }
@@ -144,7 +156,7 @@ class GalleryContainer extends React.Component {
           isShown={this.state.showSmsModal} 
           handleClose={this.toggleSmsModal}
           smsRecepient="+19548042297"
-          smsBody="https://c2.staticflickr.com/9/8817/28973449265_07e3aa5d2e_b.jpg">
+          smsBody={this.generateSmsContentFromSelected()}>
         </SmsModal>
         <Button 
           bsStyle="success" 
