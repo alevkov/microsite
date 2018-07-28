@@ -23,6 +23,7 @@ class GalleryContainer extends React.Component {
     this.state = {
       selectedImages: new Set(),
       images: this.props.images,
+      realImages: this.props.images,
       showControlDock: true,
       showSmsModal: false,
       currentImage: 0,
@@ -39,7 +40,7 @@ class GalleryContainer extends React.Component {
     this.selectPhoto = this.selectPhoto.bind(this);
     this.toggleSelect = this.toggleSelect.bind(this);
     this.generateSmsContentFromSelected = 
-      this.generateSmsContentFromSelected.bind(this);
+    this.generateSmsContentFromSelected.bind(this);
   }
 
   componentDidMount() {
@@ -50,16 +51,31 @@ class GalleryContainer extends React.Component {
       url: url,
     }).then(response => {
       var newImages = []
+      var newRealImages =[]
       response.data.data.Items.forEach((element) => {
+        const imgName = element["PhotoID"].split("/").slice(-1)[0];
+        const thumbUrl = "https://helios-microsite.imgix.net/" + 
+            localStorage.getItem(constants.kEventId) +
+            "/" + imgName + "?w=900&h=300";
+        console.log(thumbUrl);
         let image = {
+          src: thumbUrl,
+          actual: element["PhotoID"],
+          width: 3,
+          height: 2
+        }
+        let realImage = {
           src: element["PhotoID"],
+          thumbnail: thumbUrl,
           width: 3,
           height: 2
         }
         newImages.push(image);
+        newRealImages.push(realImage);
       });
       this.setState({
         images: newImages,
+        realImages: newRealImages,
         imagesLoading: false
       });
     })
@@ -129,7 +145,7 @@ class GalleryContainer extends React.Component {
     let smsContent = "";
     let photos = this.state.images;
     this.state.selectedImages.forEach(i => {
-      smsContent += photos[i].src;
+      smsContent += photos[i].actual;
       smsContent += '\n';
     });
     return smsContent;
@@ -142,7 +158,7 @@ class GalleryContainer extends React.Component {
   render() {
     return (
       <div>
-        <div style={{position:"fixed", top:"50%", left:"50%"}}>
+        <div style={{position:"fixed", top:"50%", left:"48%"}}>
           <DotLoader
             color={'#ffffff'} 
             loading={this.state.imagesLoading} />
@@ -151,7 +167,7 @@ class GalleryContainer extends React.Component {
           photos={this.state.images}
           onClick={this.selectPhoto}
           ImageComponent={SelectedImage} />
-        <Lightbox images={this.state.images}
+        <Lightbox images={this.state.realImages}
           onClose={this.closeLightbox}
           onClickPrev={this.gotoPrevious}
           onClickNext={this.gotoNext}
@@ -177,6 +193,17 @@ class GalleryContainer extends React.Component {
 
 GalleryContainer.propTypes = {
   images: PropTypes.arrayOf(
+    PropTypes.shape({
+      src: PropTypes.string.isRequired,
+      thumbnail: PropTypes.string.isRequired,
+      srcset: PropTypes.array,
+      caption: PropTypes.string,
+      thumbnailWidth: PropTypes.number.isRequired,
+      thumbnailHeight: PropTypes.number.isRequired,
+      isSelected: PropTypes.bool
+    })
+  ).isRequired,
+  realImages: PropTypes.arrayOf(
     PropTypes.shape({
       src: PropTypes.string.isRequired,
       thumbnail: PropTypes.string.isRequired,
