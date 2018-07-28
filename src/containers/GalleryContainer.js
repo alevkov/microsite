@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from "react-bootstrap";
+import { DotLoader } from 'react-spinners';
 // styles
 import '../App.css';
 // components
@@ -25,7 +26,8 @@ class GalleryContainer extends React.Component {
       showControlDock: true,
       showSmsModal: false,
       currentImage: 0,
-      selectAll: false
+      selectAll: false,
+      imagesLoading: true
     };
 
     this.toggleSmsModal = this.toggleSmsModal.bind(this);
@@ -57,7 +59,8 @@ class GalleryContainer extends React.Component {
         newImages.push(image);
       });
       this.setState({
-        images: newImages
+        images: newImages,
+        imagesLoading: false
       });
     })
     .catch(error => {
@@ -139,6 +142,11 @@ class GalleryContainer extends React.Component {
   render() {
     return (
       <div>
+        <div style={{position:"fixed", top:"50%", left:"50%"}}>
+          <DotLoader
+            color={'#ffffff'} 
+            loading={this.state.imagesLoading} />
+        </div>
         <Gallery 
           photos={this.state.images}
           onClick={this.selectPhoto}
