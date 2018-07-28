@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Rodal from 'rodal';
+import Dialog from 'react-bootstrap-dialog'
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 // styles
 import 'rodal/lib/rodal.css';
@@ -14,8 +15,8 @@ export default class SmsModal extends Component {
 		super(props);
 
 		this.state = {
-  	  recepient: this.props.smsRecepient,
-  	  sms: this.props.smsBody
+      recepient: this.props.smsRecepient, // recepient of SMS
+  	  header: 'Check out my photos!' // SMS header
 	  }
 
     this.handleRecepientChange = this.handleRecepientChange.bind(this);
@@ -28,15 +29,15 @@ export default class SmsModal extends Component {
   }
   
   handleTextBodyChange(event) {
-    this.setState({smsText: event.target.value});
+    this.setState({header: event.target.value});
   }
 
   handleSmsSubmit(event) {
+    let smsTotalContent = this.state.header + '\n' + this.props.smsBody;
     const smsData = {
-      smsBody: this.state.sms,
-      smsRecepient: this.state.recepient
+      smsBody: smsTotalContent,
+      smsRecepient: this.state.recepient,
     }
-    console.log(smsData);
     axios({
       method: 'post',
       url: 'https://helios-api.herokuapp.com/messaging/send',
@@ -45,12 +46,14 @@ export default class SmsModal extends Component {
       },
       data: Querystring.stringify(smsData)
     }).then(response => {
+      this.dialog.showAlert('Message send to recepient!');
       console.log(response);
     })
     .catch(error => {
+      this.dialog.showAlert('Error!' + error);
       throw(error);
     });
-  event.preventDefault();
+    event.preventDefault();
   }
 
   render () {
@@ -59,7 +62,6 @@ export default class SmsModal extends Component {
     	width:100,
     	flexWrap: 'wrap',
 	  }
-
     return (
     	<div className="SmsModal">
     	  <Rodal width="600" height="270" visible={this.props.isShown} onClose={this.props.handleClose}>
@@ -75,7 +77,7 @@ export default class SmsModal extends Component {
             <FormGroup controlId="sms" bsSize="large">
               <ControlLabel id="sms-label">Message</ControlLabel>
               <FormControl
-                defaultValue={this.props.smsBody}
+                defaultValue={this.state.header}
                 onChange={this.handleTextBodyChange}
                 type="text"
               />
@@ -88,6 +90,7 @@ export default class SmsModal extends Component {
             </Button>
           </form>
         </Rodal>
+        <Dialog ref={(el) => { this.dialog = el }} />
       </div>
     );
   }

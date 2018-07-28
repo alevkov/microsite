@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from "react-bootstrap";
+import { DotLoader } from 'react-spinners';
 // styles
 import '../App.css';
 // components
@@ -25,7 +26,8 @@ class GalleryContainer extends React.Component {
       showControlDock: true,
       showSmsModal: false,
       currentImage: 0,
-      selectAll: false
+      selectAll: false,
+      imagesLoading: true
     };
 
     this.toggleSmsModal = this.toggleSmsModal.bind(this);
@@ -36,6 +38,8 @@ class GalleryContainer extends React.Component {
     this.gotoPrevious = this.gotoPrevious.bind(this);
     this.selectPhoto = this.selectPhoto.bind(this);
     this.toggleSelect = this.toggleSelect.bind(this);
+    this.generateSmsContentFromSelected = 
+      this.generateSmsContentFromSelected.bind(this);
   }
 
   componentDidMount() {
@@ -55,7 +59,8 @@ class GalleryContainer extends React.Component {
         newImages.push(image);
       });
       this.setState({
-        images: newImages
+        images: newImages,
+        imagesLoading: false
       });
     })
     .catch(error => {
@@ -120,6 +125,16 @@ class GalleryContainer extends React.Component {
     this.setState({ photos: photos, selectAll: !this.state.selectAll });
   }
 
+  generateSmsContentFromSelected() {
+    let smsContent = "";
+    let photos = this.state.images;
+    this.state.selectedImages.forEach(i => {
+      smsContent += photos[i].src;
+      smsContent += '\n';
+    });
+    return smsContent;
+  }
+
   hideSmsModal() {
     this.setState({ showSmsModal: false });
   }
@@ -127,13 +142,15 @@ class GalleryContainer extends React.Component {
   render() {
     return (
       <div>
+        <div style={{position:"fixed", top:"50%", left:"50%"}}>
+          <DotLoader
+            color={'#ffffff'} 
+            loading={this.state.imagesLoading} />
+        </div>
         <Gallery 
           photos={this.state.images}
           onClick={this.selectPhoto}
           ImageComponent={SelectedImage} />
-        <Button 
-          bsStyle="success" 
-          onClick={this.openLightboxButton}>Slideshow</Button>
         <Lightbox images={this.state.images}
           onClose={this.closeLightbox}
           onClickPrev={this.gotoPrevious}
@@ -147,8 +164,12 @@ class GalleryContainer extends React.Component {
           isShown={this.state.showSmsModal} 
           handleClose={this.toggleSmsModal}
           smsRecepient="+19548042297"
-          smsBody="https://c2.staticflickr.com/9/8817/28973449265_07e3aa5d2e_b.jpg">
+          smsBody={this.generateSmsContentFromSelected()}>
         </SmsModal>
+        <Button 
+          bsStyle="success" 
+          onClick={this.openLightboxButton}>Preview
+        </Button>
       </div>
     );
   }
