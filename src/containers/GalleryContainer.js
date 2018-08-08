@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from "react-bootstrap";
-import { DotLoader } from 'react-spinners';
+import { SyncLoader } from 'react-spinners';
 // styles
 import '../App.css';
 // components
@@ -11,7 +11,6 @@ import Lightbox from 'react-images';
 import SmsModal from '../components/SmsModal';
 import SharingDock from '../components/SharingDock';
 // helpers
-import shuffle from 'shuffle-array';
 import axios from 'axios';
 // constants
 const constants = require('../constants');
@@ -50,8 +49,8 @@ class GalleryContainer extends React.Component {
       method: 'get',
       url: url,
     }).then(response => {
-      var newImages = []
-      var newRealImages =[]
+      const newImages = [];
+      const newRealImages = [];
       response.data.data.Items.forEach((element) => {
         const imgName = element["PhotoID"].split("/").slice(-1)[0];
         const thumbUrl = "https://helios-microsite.imgix.net/" + 
@@ -147,6 +146,8 @@ class GalleryContainer extends React.Component {
     this.state.selectedImages.forEach(i => {
       smsContent += photos[i].actual;
       smsContent += '\n';
+      smsContent += '-------------------';
+      smsContent += '\n';
     });
     return smsContent;
   }
@@ -158,8 +159,8 @@ class GalleryContainer extends React.Component {
   render() {
     return (
       <div>
-        <div style={{position:"fixed", top:"50%", left:"48%"}}>
-          <DotLoader
+        <div class="row align-items-center justify-content-center">
+          <SyncLoader
             color={'#ffffff'} 
             loading={this.state.imagesLoading} />
         </div>
@@ -182,10 +183,6 @@ class GalleryContainer extends React.Component {
           smsRecepient="+19548042297"
           smsBody={this.generateSmsContentFromSelected()}>
         </SmsModal>
-        <Button 
-          bsStyle="success" 
-          onClick={this.openLightboxButton}>Preview
-        </Button>
       </div>
     );
   }
