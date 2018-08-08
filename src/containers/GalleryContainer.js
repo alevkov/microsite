@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from "react-bootstrap";
-import { DotLoader } from 'react-spinners';
+import { SyncLoader } from 'react-spinners';
 // styles
 import '../App.css';
 // components
@@ -11,7 +11,6 @@ import Lightbox from 'react-images';
 import SmsModal from '../components/SmsModal';
 import SharingDock from '../components/SharingDock';
 // helpers
-import shuffle from 'shuffle-array';
 import axios from 'axios';
 // constants
 const constants = require('../constants');
@@ -23,6 +22,7 @@ class GalleryContainer extends React.Component {
     this.state = {
       selectedImages: new Set(),
       images: this.props.images,
+      realImages: this.props.images,
       showControlDock: true,
       showSmsModal: false,
       currentImage: 0,
@@ -39,7 +39,7 @@ class GalleryContainer extends React.Component {
     this.selectPhoto = this.selectPhoto.bind(this);
     this.toggleSelect = this.toggleSelect.bind(this);
     this.generateSmsContentFromSelected = 
-      this.generateSmsContentFromSelected.bind(this);
+    this.generateSmsContentFromSelected.bind(this);
   }
 
   componentDidMount() {
@@ -49,17 +49,32 @@ class GalleryContainer extends React.Component {
       method: 'get',
       url: url,
     }).then(response => {
-      var newImages = []
+      const newImages = [];
+      const newRealImages = [];
       response.data.data.Items.forEach((element) => {
+        const imgName = element["PhotoID"].split("/").slice(-1)[0];
+        const thumbUrl = "https://helios-microsite.imgix.net/" + 
+            localStorage.getItem(constants.kEventId) +
+            "/" + imgName + "?w=900&h=300";
+        console.log(thumbUrl);
         let image = {
+          src: thumbUrl,
+          actual: element["PhotoID"],
+          width: 3,
+          height: 2
+        }
+        let realImage = {
           src: element["PhotoID"],
+          thumbnail: thumbUrl,
           width: 3,
           height: 2
         }
         newImages.push(image);
+        newRealImages.push(realImage);
       });
       this.setState({
         images: newImages,
+        realImages: newRealImages,
         imagesLoading: false
       });
     })
@@ -129,7 +144,9 @@ class GalleryContainer extends React.Component {
     let smsContent = "";
     let photos = this.state.images;
     this.state.selectedImages.forEach(i => {
-      smsContent += photos[i].src;
+      smsContent += photos[i].actual;
+      smsContent += '\n';
+      smsContent += '-------------------';
       smsContent += '\n';
     });
     return smsContent;
@@ -142,8 +159,8 @@ class GalleryContainer extends React.Component {
   render() {
     return (
       <div>
-        <div style={{position:"fixed", top:"50%", left:"50%"}}>
-          <DotLoader
+        <div class="row align-items-center justify-content-center">
+          <SyncLoader
             color={'#ffffff'} 
             loading={this.state.imagesLoading} />
         </div>
@@ -151,7 +168,7 @@ class GalleryContainer extends React.Component {
           photos={this.state.images}
           onClick={this.selectPhoto}
           ImageComponent={SelectedImage} />
-        <Lightbox images={this.state.images}
+        <Lightbox images={this.state.realImages}
           onClose={this.closeLightbox}
           onClickPrev={this.gotoPrevious}
           onClickNext={this.gotoNext}
@@ -166,10 +183,6 @@ class GalleryContainer extends React.Component {
           smsRecepient="+19548042297"
           smsBody={this.generateSmsContentFromSelected()}>
         </SmsModal>
-        <Button 
-          bsStyle="success" 
-          onClick={this.openLightboxButton}>Preview
-        </Button>
       </div>
     );
   }
@@ -177,6 +190,17 @@ class GalleryContainer extends React.Component {
 
 GalleryContainer.propTypes = {
   images: PropTypes.arrayOf(
+    PropTypes.shape({
+      src: PropTypes.string.isRequired,
+      thumbnail: PropTypes.string.isRequired,
+      srcset: PropTypes.array,
+      caption: PropTypes.string,
+      thumbnailWidth: PropTypes.number.isRequired,
+      thumbnailHeight: PropTypes.number.isRequired,
+      isSelected: PropTypes.bool
+    })
+  ).isRequired,
+  realImages: PropTypes.arrayOf(
     PropTypes.shape({
       src: PropTypes.string.isRequired,
       thumbnail: PropTypes.string.isRequired,

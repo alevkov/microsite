@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import Dock from 'react-dock';
 import IconButton from '@material-ui/core/IconButton';
 // assets
@@ -9,10 +8,6 @@ import FacebookBox from 'material-ui-community-icons/icons/facebook-box';
 import TwitterBox from 'material-ui-community-icons/icons/twitter-box';
 
 export default class SharingDock extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-
   render() {
     const sharingListStyles = {
       display:'flex',
@@ -22,7 +17,8 @@ export default class SharingDock extends React.Component {
 
     const sharingButtonStyles = {
       listStyleType: 'none',
-      padding: 20
+      paddingTop: 10,
+      paddingRight: 40
     }
 
     const dockStyles = {
