@@ -33,8 +33,8 @@ export function computeSizes({ photos, columns, width, margin }) {
     // assign height, but let height of a single photo in the last
     // row not expand across columns so divide by columns
     const height = (rowIndex !== lastRowIndex || row.length > 1) // eslint-disable-line
-        ? rowWidth / totalRatio
-        : rowWidth / columns / totalRatio;
+      ? rowWidth / totalRatio
+      : rowWidth / columns / totalRatio;
 
     return row.map(photo => ({
       ...photo,

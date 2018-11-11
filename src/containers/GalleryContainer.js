@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from "react-bootstrap";
+import { Button } from 'react-bootstrap';
 import { SyncLoader } from 'react-spinners';
 // styles
 import '../App.css';
@@ -10,6 +10,7 @@ import SelectedImage from '../components/neptunian/SelectedImage';
 import Lightbox from 'react-images';
 import SmsModal from '../components/SmsModal';
 import SharingDock from '../components/SharingDock';
+import CloudInterface from '../extras/s3';
 // helpers
 import axios from 'axios';
 // constants
@@ -38,37 +39,39 @@ class GalleryContainer extends React.Component {
     this.gotoPrevious = this.gotoPrevious.bind(this);
     this.selectPhoto = this.selectPhoto.bind(this);
     this.toggleSelect = this.toggleSelect.bind(this);
-    this.generateSmsContentFromSelected = 
-    this.generateSmsContentFromSelected.bind(this);
+    this.generateShareContentFromSelected = 
+    this.generateShareContentFromSelected.bind(this);
   }
 
   componentDidMount() {
-    const url = 'https://helios-api.herokuapp.com/events/' + 
+    //TODO:
+    const url = 'https://s3.us-east-2.amazonaws.com/helios-photos/' + 
     localStorage.getItem(constants.kEventId);
-    axios({
-      method: 'get',
-      url: url,
-    }).then(response => {
+    const s3 = new CloudInterface();
+    s3.list('helios-photos', localStorage.getItem(constants.kEventId)+ '/loveit').then(response => {
       const newImages = [];
       const newRealImages = [];
-      response.data.data.Items.forEach((element) => {
-        const imgName = element["PhotoID"].split("/").slice(-1)[0];
-        const thumbUrl = "https://helios-microsite.imgix.net/" + 
+      console.log(response);
+      response.forEach((element) => {
+        const imgName = element.split('/').slice(-1)[0];
+        /*
+        const thumbUrl = 'https://helios-microsite.imgix.net/' + 
             localStorage.getItem(constants.kEventId) +
-            "/" + imgName + "?w=900&h=300";
+            '/' + 'loveit' + '/' + imgName + '?w=900&h=300';*/
+        const thumbUrl = element;
         console.log(thumbUrl);
         let image = {
           src: thumbUrl,
-          actual: element["PhotoID"],
+          actual: element,
           width: 3,
           height: 2
-        }
+        };
         let realImage = {
-          src: element["PhotoID"],
+          src: element,
           thumbnail: thumbUrl,
           width: 3,
           height: 2
-        }
+        };
         newImages.push(image);
         newRealImages.push(realImage);
       });
@@ -77,9 +80,8 @@ class GalleryContainer extends React.Component {
         realImages: newRealImages,
         imagesLoading: false
       });
-    })
-    .catch(error => {
-      throw(error);
+    }).catch(error => {
+        throw(error);
     });
   }
 
@@ -119,7 +121,7 @@ class GalleryContainer extends React.Component {
   toggleSmsModal() {
     this.setState({
       showSmsModal: !this.state.showSmsModal
-    })
+    });
   }
 
   selectPhoto(event, obj) {
@@ -135,21 +137,21 @@ class GalleryContainer extends React.Component {
 
   toggleSelect() {
     let photos = this.state.images.map((photo, index) => {
-      return { ...photo, selected: !this.state.selectAll } 
+      return { ...photo, selected: !this.state.selectAll }; 
     });
     this.setState({ photos: photos, selectAll: !this.state.selectAll });
   }
 
-  generateSmsContentFromSelected() {
-    let smsContent = "";
+  generateShareContentFromSelected() {
+    let content = '';
     let photos = this.state.images;
     this.state.selectedImages.forEach(i => {
-      smsContent += photos[i].actual;
-      smsContent += '\n';
-      smsContent += '-------------------';
-      smsContent += '\n';
+      content += photos[i].actual;
+      content += '\n';
+      content += '-------------------';
+      content += '\n';
     });
-    return smsContent;
+    return content;
   }
 
   hideSmsModal() {
@@ -181,7 +183,7 @@ class GalleryContainer extends React.Component {
           isShown={this.state.showSmsModal} 
           handleClose={this.toggleSmsModal}
           smsRecepient="+19548042297"
-          smsBody={this.generateSmsContentFromSelected()}>
+          smsBody={this.generateShareContentFromSelected()}>
         </SmsModal>
       </div>
     );

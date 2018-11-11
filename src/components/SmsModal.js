@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Rodal from 'rodal';
-import Dialog from 'react-bootstrap-dialog'
-import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import Dialog from 'react-bootstrap-dialog';
+import { Button, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 // styles
 import 'rodal/lib/rodal.css';
 import '../styles/SmsModal.css';
@@ -11,18 +11,18 @@ import axios from 'axios';
 import Querystring from 'querystring';
 
 export default class SmsModal extends Component {
-	constructor(props) {
-		super(props);
+  constructor(props) {
+    super(props);
 
-		this.state = {
+    this.state = {
       recepient: this.props.smsRecepient, // recepient of SMS
   	  header: 'Check out my photos!' // SMS header
-	  }
+	  };
 
     this.handleRecepientChange = this.handleRecepientChange.bind(this);
     this.handleTextBodyChange = this.handleTextBodyChange.bind(this);
     this.handleSmsSubmit = this.handleSmsSubmit.bind(this);
-	}
+  }
 
   handleRecepientChange(event) {
     this.setState({recepient: event.target.value});
@@ -37,7 +37,7 @@ export default class SmsModal extends Component {
     const smsData = {
       smsBody: smsTotalContent,
       smsRecepient: this.state.recepient,
-    }
+    };
     axios({
       method: 'post',
       url: 'https://helios-api.herokuapp.com/messaging/send',
@@ -49,10 +49,10 @@ export default class SmsModal extends Component {
       this.dialog.showAlert('Message send to recepient!');
       console.log(response);
     })
-    .catch(error => {
-      this.dialog.showAlert('Error!' + error);
-      throw(error);
-    });
+      .catch(error => {
+        this.dialog.showAlert('Error!' + error);
+        throw(error);
+      });
     event.preventDefault();
   }
 
@@ -61,7 +61,7 @@ export default class SmsModal extends Component {
     	display: 'block',
     	width:100,
     	flexWrap: 'wrap',
-	  }
+	  };
     return (
     	<div className="SmsModal">
     	  <Rodal width="600" height="270" visible={this.props.isShown} onClose={this.props.handleClose}>
@@ -90,7 +90,7 @@ export default class SmsModal extends Component {
             </Button>
           </form>
         </Rodal>
-        <Dialog ref={(el) => { this.dialog = el }} />
+        <Dialog ref={(el) => { this.dialog = el; }} />
       </div>
     );
   }

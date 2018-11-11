@@ -25,7 +25,7 @@ const cont = {
   overflow: 'hidden',
   float: 'left',
   position: 'relative'
-}
+};
 
 const SelectedImage = ({ index, onClick, photo, margin }) => {
   //calculate x,y scale
@@ -39,10 +39,10 @@ const SelectedImage = ({ index, onClick, photo, margin }) => {
       <img style={photo.selected ? { ...imgStyle, ...selectedImgStyle } : { ...imgStyle }} {...photo} onClick={(e) => onClick(e, { index, photo })} />
 
       <style>
-        {`.not-selected:hover{outline:2px solid #06befa}`}
+        {'.not-selected:hover{outline:2px solid #06befa}'}
       </style>
     </div>
-  )
+  );
 };
 
 export default SelectedImage;

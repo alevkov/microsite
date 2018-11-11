@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { Link } from "react-router-dom";
-import { Nav, Navbar, NavItem } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
-import Routes from "./Routes";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Nav, Navbar, NavItem } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
+import Routes from './Routes';
 // styles
 import './App.css';
 // constants
@@ -17,23 +17,28 @@ class App extends React.Component {
     };
 
     if (localStorage.getItem(constants.kEventId) === null) {
-      localStorage.setItem(constants.kEventId, "abc");
+      localStorage.setItem(constants.kEventId, 'abc');
     }
   }
 
   render() {
+    const adminRoute = '/admin';
+    const homeRoute = '/';
     return(
-      <div className="App container">
+      <div className='App container'>
         <Navbar fluid collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
-              <Link to="/">Helios</Link>
+              <Link to={homeRoute}>
+                Helios
+              </Link>
             </Navbar.Brand>
-            <Navbar.Toggle />
+            <Navbar.Toggle>
+            </Navbar.Toggle>
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav pullRight>
-              <LinkContainer to="/admin">
+              <LinkContainer to='/admin'>
                 <NavItem>Admin</NavItem>
               </LinkContainer>
             </Nav>
@@ -43,6 +48,6 @@ class App extends React.Component {
       </div>
     );
   }
-};
+}
 
 export default App;
