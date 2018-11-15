@@ -1,6 +1,5 @@
 import AWS from 'aws-sdk';
 
-console.log(process.env);
 export default class CloudInterface {
   static _url = 'https://s3.us-east-2.amazonaws.com/helios-photos/'
   static _bucket = 'helios-photos';
