@@ -1,7 +1,7 @@
-import React from "react";
-import { Route, Switch } from "react-router-dom";
-import GalleryContainer from "./containers/GalleryContainer";
-import AdminContainer from "./containers/AdminContainer";
+import React from 'react';
+import { Route, Switch } from 'react-router-dom';
+import GalleryContainer from './containers/GalleryContainer';
+import AdminContainer from './containers/AdminContainer';
 
 export default () =>
   <Switch>
