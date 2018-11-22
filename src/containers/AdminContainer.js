@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import CloudInterface from '../extras/s3';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import Dialog from 'react-bootstrap-dialog'
 // styles
@@ -7,6 +8,7 @@ import '../styles/AdminContainer.css';
 import axios from 'axios';
 // constants
 const constants = require('../constants');
+
 
 export default class AdminContainer extends Component {
   constructor(props) {
@@ -18,17 +20,13 @@ export default class AdminContainer extends Component {
   }
 
   handleDeleteAllForEvent = event => {
-    axios({
-      method: 'get',
-      url: 'https://helios-api.herokuapp.com/events/delete/'
-      + localStorage.getItem(constants.kEventId)
-    })
-    .then(response => {
-      this.dialog.showAlert('All photos deleted!');
+    const s3 = new CloudInterface();
+    s3.delete('helios-photos', localStorage.getItem(constants.kEventId)+ '/loveit')
+    .then(result => {
+      this.dialog.showAlert(result.message);
     })
     .catch(error => {
       this.dialog.showAlert('Error! Contact your sysadmin. ' + error);
-      throw(error);
     });
   }
 

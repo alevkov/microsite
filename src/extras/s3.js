@@ -36,4 +36,38 @@ export default class CloudInterface {
       });
     });
   }
+
+  delete = (bucket, key) => {
+    return new Promise((resolve, reject) => {
+      const listParams = { 
+        Bucket: bucket,
+        Delimiter: '',
+        Prefix: key
+      }
+      this.s3.listObjects(listParams, (err, data) => {
+        if (err) {
+          reject(err);
+        }
+
+        if (data.Contents.length == 0) {
+          resolve({ "message" : "bucket empty!" });
+        }
+
+        const deleteParams = { Bucket: bucket };
+        deleteParams.Delete = { Objects:[] };
+
+        data.Contents.forEach(content => {
+          deleteParams.Delete.Objects.push({Key: content.Key});
+        });
+
+        this.s3.deleteObjects(deleteParams, (err, data) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve({ "message" : "deleted all!" });
+          }
+        });
+      });
+    });
+  }
 }

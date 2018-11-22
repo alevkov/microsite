@@ -44,11 +44,11 @@ class GalleryContainer extends React.Component {
   }
 
   componentDidMount() {
-    //TODO:
     const url = 'https://s3.us-east-2.amazonaws.com/helios-photos/' + 
     localStorage.getItem(constants.kEventId);
     const s3 = new CloudInterface();
-    s3.list('helios-photos', localStorage.getItem(constants.kEventId)+ '/loveit').then(response => {
+    s3.list('helios-photos', localStorage.getItem(constants.kEventId) + '/loveit')
+    .then(response => {
       const newImages = [];
       const newRealImages = [];
       console.log(response);
