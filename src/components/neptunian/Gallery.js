@@ -1,45 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import ResizeObserver from 'resize-observer-polyfill';
 import Photo, { photoPropType } from './Photo';
-import { computeSizes } from './utils';
+import { computeSizes, computeSizesColumns } from './utils';
 
 class Gallery extends React.Component {
   state = {
     containerWidth: 0,
   };
-
-  constructor() {
-    super();
-
-    let that = this;
-    // this is to fix non-ios browsers where a scrollbar isnt present before
-    // images load, then becomes present, and doesn't trigger an update.
-    // avoids calling setState in componentDidUpdate causing maximum depth exceeded error
-    if (typeof window !== 'undefined') {
-      window.requestAnimationFrame(function() {
-        if (that._gallery.clientWidth !== that.state.containerWidth) {
-          that.setState({ containerWidth: Math.floor(that._gallery.clientWidth) });
-        }
-      });
-    }
-  }
-
   componentDidMount() {
-    this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
-    window.addEventListener('resize', this.handleResize);
+    this.observer = new ResizeObserver(entries => {
+      // only do something if width changes
+      const newWidth = entries[0].contentRect.width;
+      if (this.state.containerWidth !== newWidth) {
+        this.setState({ containerWidth: Math.floor(newWidth) });
+      }
+    });
+    this.observer.observe(this._gallery);
   }
-
   componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize, false);
+    this.observer.disconnect();
   }
-
-  handleResize = () => {
-    if (this._gallery.clientWidth !== this.state.containerWidth) {
-      this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
-    }
-  };
-  
   handleClick = (event, { index }) => {
     const { photos, onClick } = this.props;
     onClick(event, {
@@ -51,28 +32,54 @@ class Gallery extends React.Component {
   };
 
   render() {
+    const containerWidth = this.state.containerWidth;
+    // no containerWidth until after first render with refs, skip calculations and render nothing
+    if (!containerWidth) return <div ref={c => (this._gallery = c)} />;
     const { ImageComponent = Photo } = this.props;
     // subtract 1 pixel because the browser may round up a pixel
-    const width = this.state.containerWidth - 1;
-    const { photos, columns, margin, onClick } = this.props;
-    const thumbs = computeSizes({ width, columns, margin, photos });
+    const { margin, onClick, direction, onExpand } = this.props;
+    let { columns } = this.props;
+
+    // set default breakpoints if user doesn't specify columns prop
+    if (columns === undefined) {
+      columns = 1;
+      if (containerWidth >= 500) columns = 2;
+      if (containerWidth >= 900) columns = 3;
+      if (containerWidth >= 1500) columns = 4;
+    }
+    const photos = this.props.photos;
+    const width = containerWidth - 1;
+    let galleryStyle, thumbs;
+
+    if (direction === 'row') {
+      galleryStyle = { display: 'flex', flexWrap: 'wrap', flexDirection: 'row' };
+      thumbs = computeSizes({ width, columns, margin, photos });
+    }
+    if (direction === 'column') {
+      galleryStyle = { position: 'relative' };
+      thumbs = computeSizesColumns({ width, columns, margin, photos });
+      galleryStyle.height = thumbs[thumbs.length - 1].containerHeight;
+    }
     return (
       <div className="react-photo-gallery--gallery">
-        <div ref={c => (this._gallery = c)}>
+        <div ref={c => (this._gallery = c)} style={galleryStyle}>
           {thumbs.map((photo, index) => {
-            const { width, height } = photo;
+            const { left, top, containerHeight, ...rest } = photo;
             return (
               <ImageComponent
                 key={photo.key || photo.src}
                 margin={margin}
                 index={index}
-                photo={photo}
+                photo={rest}
+                direction={direction}
+                left={left}
+                top={top}
                 onClick={onClick ? this.handleClick : null}
+                onExpand={onExpand ? onExpand : null}
               />
             );
           })}
         </div>
-        <div style={{ content: '', display: 'table', clear: 'both' }} />
       </div>
     );
   }
@@ -80,6 +87,7 @@ class Gallery extends React.Component {
 
 Gallery.propTypes = {
   photos: PropTypes.arrayOf(photoPropType).isRequired,
+  direction: PropTypes.string,
   onClick: PropTypes.func,
   columns: PropTypes.number,
   margin: PropTypes.number,
@@ -87,8 +95,8 @@ Gallery.propTypes = {
 };
 
 Gallery.defaultProps = {
-  columns: 3,
   margin: 2,
+  direction: 'row',
 };
 
 export default Gallery;

@@ -33,7 +33,6 @@ class GalleryContainer extends React.Component {
 
     this.toggleSmsModal = this.toggleSmsModal.bind(this);
     this.closeLightbox = this.closeLightbox.bind(this);
-    this.openLightbox = this.openLightbox.bind(this);
     this.openLightboxButton = this.openLightboxButton.bind(this);
     this.gotoNext = this.gotoNext.bind(this);
     this.gotoPrevious = this.gotoPrevious.bind(this);
@@ -59,7 +58,6 @@ class GalleryContainer extends React.Component {
             localStorage.getItem(constants.kEventId) +
             '/' + 'loveit' + '/' + imgName + '?w=900&h=300';*/
         const thumbUrl = element;
-        console.log(thumbUrl);
         let image = {
           src: thumbUrl,
           actual: element,
@@ -85,9 +83,9 @@ class GalleryContainer extends React.Component {
     });
   }
 
-  openLightbox(event, obj) {
+  openLightbox = index => () => {
     this.setState({
-      currentImage: obj.index,
+      currentImage: index,
       lightboxIsOpen: true,
     });
   }
@@ -168,6 +166,7 @@ class GalleryContainer extends React.Component {
         </div>
         <Gallery 
           photos={this.state.images}
+          onExpand={this.openLightbox}
           onClick={this.selectPhoto}
           ImageComponent={SelectedImage} />
         <Lightbox images={this.state.realImages}

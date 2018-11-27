@@ -11,6 +11,19 @@ const Checkmark = ({ selected }) => (
   </div>
 );
 
+const Preview = ({ selected, onExpand, index }) => (
+  <div 
+    onClick={onExpand(index)} 
+    style={selected ? { right: '45px', top: '22px', position: 'absolute', zIndex: '1' } : { display: 'none' }}>
+    <svg style={{ position: 'absolute' }} width="50px" height="50px">
+      <style>
+        {`svg:hover{fill: #06befa}`}
+      </style>
+      <path d="M16.803,18.615h-4.535c-1,0-1.814-0.812-1.814-1.812v-4.535c0-1.002,0.814-1.814,1.814-1.814h4.535c1.001,0,1.813,0.812,1.813,1.814v4.535C18.616,17.803,17.804,18.615,16.803,18.615zM17.71,12.268c0-0.502-0.405-0.906-0.907-0.906h-4.535c-0.501,0-0.906,0.404-0.906,0.906v4.535c0,0.502,0.405,0.906,0.906,0.906h4.535c0.502,0,0.907-0.404,0.907-0.906V12.268z M16.803,9.546h-4.535c-1,0-1.814-0.812-1.814-1.814V3.198c0-1.002,0.814-1.814,1.814-1.814h4.535c1.001,0,1.813,0.812,1.813,1.814v4.534C18.616,8.734,17.804,9.546,16.803,9.546zM17.71,3.198c0-0.501-0.405-0.907-0.907-0.907h-4.535c-0.501,0-0.906,0.406-0.906,0.907v4.534c0,0.501,0.405,0.908,0.906,0.908h4.535c0.502,0,0.907-0.406,0.907-0.908V3.198z M7.733,18.615H3.198c-1.002,0-1.814-0.812-1.814-1.812v-4.535c0-1.002,0.812-1.814,1.814-1.814h4.535c1.002,0,1.814,0.812,1.814,1.814v4.535C9.547,17.803,8.735,18.615,7.733,18.615zM8.64,12.268c0-0.502-0.406-0.906-0.907-0.906H3.198c-0.501,0-0.907,0.404-0.907,0.906v4.535c0,0.502,0.406,0.906,0.907,0.906h4.535c0.501,0,0.907-0.404,0.907-0.906V12.268z M7.733,9.546H3.198c-1.002,0-1.814-0.812-1.814-1.814V3.198c0-1.002,0.812-1.814,1.814-1.814h4.535c1.002,0,1.814,0.812,1.814,1.814v4.534C9.547,8.734,8.735,9.546,7.733,9.546z M8.64,3.198c0-0.501-0.406-0.907-0.907-0.907H3.198c-0.501,0-0.907,0.406-0.907,0.907v4.534c0,0.501,0.406,0.908,0.907,0.908h4.535c0.501,0,0.907-0.406,0.907-0.908V3.198z"></path>
+    </svg>
+  </div>
+);
+
 const imgStyle = {
   display: 'block',
   transition: 'transform .135s cubic-bezier(0.0,0.0,0.2,1),opacity linear .15s'
@@ -25,9 +38,9 @@ const cont = {
   overflow: 'hidden',
   float: 'left',
   position: 'relative'
-};
+}
 
-const SelectedImage = ({ index, onClick, photo, margin }) => {
+const SelectedImage = ({ index, onClick, photo, margin, onExpand }) => {
   //calculate x,y scale
   const sx = (100 - ((30 / photo.width) * 100)) / 100;
   const sy = (100 - ((30 / photo.height) * 100)) / 100;
@@ -36,13 +49,14 @@ const SelectedImage = ({ index, onClick, photo, margin }) => {
     <div style={{ margin, width: photo.width, ...cont }} className={!photo.selected ? 'not-selected' : ''}>
 
       <Checkmark selected={photo.selected ? true : false} />
+      <Preview selected={photo.selected ? true : false} onExpand={onExpand} index={index}/>
       <img style={photo.selected ? { ...imgStyle, ...selectedImgStyle } : { ...imgStyle }} {...photo} onClick={(e) => onClick(e, { index, photo })} />
 
       <style>
-        {'.not-selected:hover{outline:2px solid #06befa}'}
+        {`.not-selected:hover{outline:2px solid #06befa}`}
       </style>
     </div>
-  );
+  )
 };
 
 export default SelectedImage;

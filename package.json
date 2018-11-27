@@ -19,6 +19,7 @@
     "react-router-bootstrap": "^0.24.4",
     "react-router-dom": "^4.3.1",
     "react-spinners": "^0.3.3",
+    "resize-observer-polyfill": "^1.5.0",
     "rodal": "^1.6.3",
     "shuffle-array": "^1.0.1"
   },
