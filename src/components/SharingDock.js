@@ -47,7 +47,7 @@ export default class SharingDock extends React.Component {
             </IconButton>
           </li>
           <li style={sharingButtonStyles}>
-            <IconButton>
+            <IconButton onClick={this.props.toggleEmail}>
               <EmailBox style={dockIconStyles} />
             </IconButton>
           </li>

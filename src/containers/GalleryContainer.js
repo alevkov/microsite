@@ -9,10 +9,9 @@ import Gallery from '../components/neptunian/Gallery';
 import SelectedImage from '../components/neptunian/SelectedImage';
 import Lightbox from 'react-images';
 import SmsModal from '../components/SmsModal';
+import EmailModal from '../components/EmailModal';
 import SharingDock from '../components/SharingDock';
 import CloudInterface from '../extras/s3';
-// helpers
-import axios from 'axios';
 // constants
 const constants = require('../constants');
 
@@ -26,14 +25,15 @@ class GalleryContainer extends React.Component {
       realImages: this.props.images,
       showControlDock: true,
       showSmsModal: false,
+      showEmailModal: false,
       currentImage: 0,
       selectAll: false,
       imagesLoading: true
     };
 
     this.toggleSmsModal = this.toggleSmsModal.bind(this);
+    this.toggleEmailModal = this.toggleEmailModal.bind(this);
     this.closeLightbox = this.closeLightbox.bind(this);
-    this.openLightboxButton = this.openLightboxButton.bind(this);
     this.gotoNext = this.gotoNext.bind(this);
     this.gotoPrevious = this.gotoPrevious.bind(this);
     this.selectPhoto = this.selectPhoto.bind(this);
@@ -90,13 +90,6 @@ class GalleryContainer extends React.Component {
     });
   }
 
-  openLightboxButton(event) {
-    this.setState({
-      currentImage: 0,
-      lightboxIsOpen: true,
-    });
-  }
-
   closeLightbox() {
     this.setState({
       currentImage: 0,
@@ -120,6 +113,12 @@ class GalleryContainer extends React.Component {
     this.setState({
       showSmsModal: !this.state.showSmsModal
     });
+  }
+
+  toggleEmailModal() {
+    this.setState({
+      showEmailModal: !this.state.showEmailModal
+    })
   }
 
   selectPhoto(event, obj) {
@@ -177,13 +176,20 @@ class GalleryContainer extends React.Component {
           isOpen={this.state.lightboxIsOpen} />
         <SharingDock 
           showDock={this.state.selectedImages.size !==0 } 
-          toggleSms={this.toggleSmsModal} />
+          toggleSms={this.toggleSmsModal}
+          toggleEmail={this.toggleEmailModal} />
         <SmsModal 
           isShown={this.state.showSmsModal} 
           handleClose={this.toggleSmsModal}
           smsRecepient="+19548042297"
           smsBody={this.generateShareContentFromSelected()}>
         </SmsModal>
+        <EmailModal
+          isShown={this.state.showEmailModal}
+          handleClose={this.toggleEmailModal}
+          emailRecepient="example@mail.com"
+          emailBody={this.generateShareContentFromSelected()}>
+        </EmailModal>
       </div>
     );
   }
