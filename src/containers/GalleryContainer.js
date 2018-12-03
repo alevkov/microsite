@@ -151,10 +151,6 @@ class GalleryContainer extends React.Component {
     return content;
   }
 
-  hideSmsModal() {
-    this.setState({ showSmsModal: false });
-  }
-
   render() {
     return (
       <div>

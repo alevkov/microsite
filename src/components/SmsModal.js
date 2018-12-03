@@ -3,10 +3,8 @@ import PropTypes from 'prop-types';
 import Rodal from 'rodal';
 import Dialog from 'react-bootstrap-dialog';
 import { Button, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
-// styles
 import 'rodal/lib/rodal.css';
 import '../styles/SmsModal.css';
-// api
 import axios from 'axios';
 import Querystring from 'querystring';
 

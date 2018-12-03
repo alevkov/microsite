@@ -65,7 +65,7 @@ export default class EmailModal extends Component {
         <Rodal width="600" height="270" visible={this.props.isShown} onClose={this.props.handleClose}>
           <form onSubmit={this.handleEmailSubmit}>
             <FormGroup controlId="recepient" bsSize="large">
-              <ControlLabel id="recepient-label">Phone</ControlLabel>
+              <ControlLabel id="recepient-label">Email</ControlLabel>
               <FormControl
                 autoFocus
                 defaultValue={this.props.emailRecepient}
