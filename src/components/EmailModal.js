@@ -44,14 +44,13 @@ export default class EmailModal extends Component {
       },
       data: emailData
     }).then(response => {
-      this.dialog.showAlert(response.message);
+      this.dialog.showAlert("Email sent!");
     })
       .catch(error => {
         this.dialog.showAlert('Error!' + error);
         throw(error);
       });
     event.preventDefault();
-    this.dialog.showAlert('Message send to recepient!');
   }
 
   render () {
