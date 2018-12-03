@@ -143,7 +143,7 @@ class GalleryContainer extends React.Component {
     let content = '';
     let photos = this.state.images;
     this.state.selectedImages.forEach(i => {
-      content += photos[i].actual;
+      content += encodeURIComponent(photos[i].actual);
       content += '\n';
       content += '-------------------';
       content += '\n';
