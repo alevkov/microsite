@@ -46,6 +46,7 @@ class GalleryContainer extends React.Component {
     let eventId = null;
     if (this.props.match.params.eventId != null && this.props.match.params.eventId != undefined) {
       eventId = this.props.match.params.eventId;
+      localStorage.setItem(constants.kEventId, eventId);
     } else if (localStorage.getItem(constants.kEventId) != null) {
       eventId = localStorage.getItem(constants.kEventId);
     }

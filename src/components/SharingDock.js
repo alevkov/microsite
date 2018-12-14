@@ -54,7 +54,7 @@ export default class SharingDock extends React.Component {
           </li>
           <li style={sharingButtonStyles}>
             <FacebookShareButton 
-            url={window.location.href} 
+            url={"http://helios-microsite.herokuapp.com/" + localStorage.getItem("KEY_EVENT_ID")} 
             quote={"Check out my photos!"}>
             <IconButton> 
               <FacebookBox style={dockIconStyles} />
@@ -63,7 +63,7 @@ export default class SharingDock extends React.Component {
           </li>
           <li style={sharingButtonStyles}>
             <TwitterShareButton 
-            url={window.location.href} 
+            url={"http://helios-microsite.herokuapp.com/" + localStorage.getItem("KEY_EVENT_ID")} 
             title={"Check out my photos!"}>
               <IconButton> 
                 <TwitterBox style={dockIconStyles} />
