@@ -16,7 +16,7 @@ export default class LoginContainer extends React.Component {
   }
 
   handleSignIn = event => {
-    window.location = '/';
+    window.location = '/' + localStorage.getItem("KEY_EVENT_ID");
   }
 
   render() {
