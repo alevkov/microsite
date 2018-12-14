@@ -64,7 +64,7 @@ export default class SharingDock extends React.Component {
           <li style={sharingButtonStyles}>
             <TwitterShareButton 
             url={"http://helios-microsite.herokuapp.com/" + localStorage.getItem("KEY_EVENT_ID")} 
-            title={"Check out my photos!"}>
+            title={"Check out my photos!" + "http://helios-microsite.herokuapp.com/" + localStorage.getItem("KEY_EVENT_ID")}>
               <IconButton> 
                 <TwitterBox style={dockIconStyles} />
               </IconButton>
