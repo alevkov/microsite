@@ -1,0 +1,19 @@
+.LoginContainer {
+  text-align: center;
+  justify-content: center;
+}
+
+.LoginContainer label {
+  color: #eee;
+}
+
+#eventId {
+  width: 200px;
+  margin-top: 5%;
+}
+
+.LoginContainer div {
+  display: table;
+  margin-right: auto;
+  margin-left: auto;
+}

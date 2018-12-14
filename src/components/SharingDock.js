@@ -6,6 +6,7 @@ import SmsBox from 'material-ui-community-icons/icons/message-text';
 import EmailBox from 'material-ui-community-icons/icons/email';
 import FacebookBox from 'material-ui-community-icons/icons/facebook-box';
 import TwitterBox from 'material-ui-community-icons/icons/twitter-box';
+import { FacebookShareButton, TwitterShareButton } from 'react-share';
 
 export default class SharingDock extends React.Component {
   render() {
@@ -52,14 +53,22 @@ export default class SharingDock extends React.Component {
             </IconButton>
           </li>
           <li style={sharingButtonStyles}>
-            <IconButton>
+            <FacebookShareButton 
+            url={window.location.href} 
+            quote={"Check out my photos!"}>
+            <IconButton> 
               <FacebookBox style={dockIconStyles} />
             </IconButton>
+            </FacebookShareButton>
           </li>
           <li style={sharingButtonStyles}>
-            <IconButton>
-              <TwitterBox style={dockIconStyles} />
-            </IconButton>
+            <TwitterShareButton 
+            url={window.location.href} 
+            title={"Check out my photos!"}>
+              <IconButton> 
+                <TwitterBox style={dockIconStyles} />
+              </IconButton>
+            </TwitterShareButton>
           </li>
         </ul>
       </Dock>

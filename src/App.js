@@ -15,10 +15,11 @@ class App extends React.Component {
     this.state = {
       admin: true
     };
+  }
 
-    if (localStorage.getItem(constants.kEventId) === null) {
-      localStorage.setItem(constants.kEventId, 'abc');
-    }
+  handleEventClick = event => {
+    localStorage.clear();
+    window.location = '/';
   }
 
   render() {
@@ -36,11 +37,14 @@ class App extends React.Component {
             <Navbar.Toggle>
             </Navbar.Toggle>
           </Navbar.Header>
+          
           <Navbar.Collapse>
             <Nav pullRight>
-              <LinkContainer to='/admin'>
-                <NavItem>Admin</NavItem>
-              </LinkContainer>
+
+                <NavItem onClick={this.handleEventClick}>
+                  {localStorage.getItem(constants.kEventId)}
+                </NavItem>
+
             </Nav>
           </Navbar.Collapse>
         </Navbar>
