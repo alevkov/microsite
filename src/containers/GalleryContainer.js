@@ -59,10 +59,6 @@ class GalleryContainer extends React.Component {
       console.log(response);
       response.forEach((element) => {
         const imgName = element.split('/').slice(-1)[0];
-        /*
-        const thumbUrl = 'https://helios-microsite.imgix.net/' + 
-            localStorage.getItem(constants.kEventId) +
-            '/' + 'loveit' + '/' + imgName + '?w=900&h=300';*/
         const thumbUrl = element;
         let image = {
           src: thumbUrl,
