@@ -7,6 +7,7 @@
     "@material-ui/icons": "^1.1.0",
     "aws-sdk": "^2.353.0",
     "axios": "^0.18.0",
+    "image-size": "^0.7.3",
     "material-ui": "^0.20.1",
     "material-ui-community-icons": "^0.15.0",
     "querystring": "^0.2.0",

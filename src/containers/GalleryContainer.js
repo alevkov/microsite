@@ -14,6 +14,24 @@ import SharingDock from '../components/SharingDock';
 import CloudInterface from '../extras/s3';
 // constants
 const constants = require('../constants');
+const url = require('url');
+const http = require('http');
+const sizeOf = require('image-size');
+
+const CountdownLatch = function (limit) {
+  this.limit = limit;
+  this.count = 0;
+  this.waitBlock = function (){};
+};
+CountdownLatch.prototype.countDown = function (){
+  this.count = this.count + 1;
+  if(this.limit <= this.count){
+    return this.waitBlock();
+  }
+};
+CountdownLatch.prototype.await = function(callback){
+  this.waitBlock = callback;
+};
 
 class GalleryContainer extends React.Component {
   constructor(props) {
@@ -43,6 +61,7 @@ class GalleryContainer extends React.Component {
   }
 
   componentDidMount() {
+    let that = this;
     let eventId = null;
     if (this.props.match.params.eventId != null && this.props.match.params.eventId != undefined) {
       eventId = this.props.match.params.eventId;
@@ -50,36 +69,52 @@ class GalleryContainer extends React.Component {
     } else if (localStorage.getItem(constants.kEventId) != null) {
       eventId = localStorage.getItem(constants.kEventId);
     }
-    console.log(this.props.match);
+
     const s3 = new CloudInterface();
     s3.list('helios-photos', eventId + '/loveit')
     .then(response => {
       const newImages = [];
       const newRealImages = [];
-      console.log(response);
+      const barrier = new CountdownLatch(response.length);
       response.forEach((element) => {
+
         const imgName = element.split('/').slice(-1)[0];
         const thumbUrl = element;
-        let image = {
-          src: thumbUrl,
-          actual: element,
-          width: 3,
-          height: 2
-        };
-        let realImage = {
-          src: element,
-          thumbnail: thumbUrl,
-          width: 3,
-          height: 2
-        };
-        newImages.push(image);
-        newRealImages.push(realImage);
+        const options = url.parse(thumbUrl);
+         
+        http.get(options, function (response) {
+          let chunks = [];
+          response.on('data', function (chunk) {
+            chunks.push(chunk);
+          }).on('end', function() {
+            const buffer = Buffer.concat(chunks);
+            const dimensions = sizeOf(buffer);
+            let image = {
+              src: thumbUrl,
+              actual: element,
+              width: dimensions.width,
+              height: dimensions.height
+            };
+            let realImage = {
+              src: element,
+              thumbnail: thumbUrl,
+              width: dimensions.width,
+              height: dimensions.height
+            };
+            newImages.push(image);
+            newRealImages.push(realImage);
+            barrier.countDown();
+          });
+        });
+
       });
-      this.setState({
-        images: newImages,
-        realImages: newRealImages,
-        imagesLoading: false
-      });
+      barrier.await(function() {
+        that.setState({
+          images: newImages,
+          realImages: newRealImages,
+          imagesLoading: false
+        });
+      })
     }).catch(error => {
         throw(error);
     });
