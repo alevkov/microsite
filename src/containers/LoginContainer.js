@@ -9,10 +9,17 @@ const constants = require('../constants');
 export default class LoginContainer extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      password: ""
+    }
   }
 
   handleEventIdChange = event => {
     localStorage.setItem(constants.kEventId, event.target.value);
+  }
+
+  handlePasswordChange = event => {
+    this.setState({password : event.target.value});
   }
 
   handleSignIn = event => {
@@ -30,6 +37,14 @@ export default class LoginContainer extends React.Component {
                type="text"
                onChange={this.handleEventIdChange}
                defaultValue={localStorage.getItem("KEY_EVENT_ID")} />
+          </FormGroup>
+          <FormGroup controlId="password" bSize="large">
+            <ControlLabel>password</ControlLabel>
+            <FormControl
+               autoFocus
+               type="password"
+               onChange={this.handleEventIdChange}
+               defaultValue={this.state.password} />
           </FormGroup>
         </form>
         <Button 
