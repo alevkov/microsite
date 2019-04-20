@@ -12,6 +12,11 @@
   margin-top: 5%;
 }
 
+#password {
+  width: 200px;
+  margin-top: 5%;
+}
+
 .LoginContainer div {
   display: table;
   margin-right: auto;
