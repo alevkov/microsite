@@ -49,7 +49,7 @@ export default class LoginContainer extends React.Component {
     return (
       <div className="LoginContainer">
         <form>
-          <FormGroup controlId="eventId" bSize="large">
+          <FormGroup controlId="eventId" bSize="large" onKeyPress={event => { if (event.key === "Enter") { this.handleSignIn(); } }}>
             <ControlLabel>event code</ControlLabel>
             <FormControl
                autoFocus
@@ -57,7 +57,7 @@ export default class LoginContainer extends React.Component {
                onChange={this.handleEventIdChange}
                defaultValue={localStorage.getItem("KEY_EVENT_ID")} />
           </FormGroup>
-          <FormGroup controlId="password" bSize="large">
+          <FormGroup controlId="password" bSize="large" onKeyPress={event => { if (event.key === "Enter") { this.handleSignIn(); } }}>
             <ControlLabel>password</ControlLabel>
             <FormControl
                autoFocus
