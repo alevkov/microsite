@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'react-bootstrap';
-import { SyncLoader } from 'react-spinners';
+import {SyncLoader} from 'react-spinners';
 // styles
 import '../App.css';
 // components
@@ -56,7 +55,7 @@ class GalleryContainer extends React.Component {
     this.gotoPrevious = this.gotoPrevious.bind(this);
     this.selectPhoto = this.selectPhoto.bind(this);
     this.toggleSelect = this.toggleSelect.bind(this);
-    this.generateShareContentFromSelected = 
+    this.generateShareContentFromSelected =
     this.generateShareContentFromSelected.bind(this);
   }
 
@@ -81,7 +80,7 @@ class GalleryContainer extends React.Component {
         const imgName = element.split('/').slice(-1)[0];
         const thumbUrl = element;
         const options = url.parse(thumbUrl);
-         
+
         http.get(options, function (response) {
           let chunks = [];
           response.on('data', function (chunk) {
@@ -125,7 +124,7 @@ class GalleryContainer extends React.Component {
       currentImage: index,
       lightboxIsOpen: true,
     });
-  }
+  };
 
   closeLightbox() {
     this.setState({
@@ -171,7 +170,7 @@ class GalleryContainer extends React.Component {
 
   toggleSelect() {
     let photos = this.state.images.map((photo, index) => {
-      return { ...photo, selected: !this.state.selectAll }; 
+      return { ...photo, selected: !this.state.selectAll };
     });
     this.setState({ photos: photos, selectAll: !this.state.selectAll });
   }
@@ -193,10 +192,10 @@ class GalleryContainer extends React.Component {
       <div>
         <div class="row align-items-center justify-content-center">
           <SyncLoader
-            color={'#ffffff'} 
+            color={'#ffffff'}
             loading={this.state.imagesLoading} />
         </div>
-        <Gallery 
+        <Gallery
           photos={this.state.images}
           onExpand={this.openLightbox}
           onClick={this.selectPhoto}
@@ -207,12 +206,12 @@ class GalleryContainer extends React.Component {
           onClickNext={this.gotoNext}
           currentImage={this.state.currentImage}
           isOpen={this.state.lightboxIsOpen} />
-        <SharingDock 
-          showDock={this.state.selectedImages.size !==0 } 
+        <SharingDock
+          showDock={this.state.selectedImages.size !==0 }
           toggleSms={this.toggleSmsModal}
           toggleEmail={this.toggleEmailModal} />
-        <SmsModal 
-          isShown={this.state.showSmsModal} 
+        <SmsModal
+          isShown={this.state.showSmsModal}
           handleClose={this.toggleSmsModal}
           smsRecepient="+19548042297"
           smsBody={this.generateShareContentFromSelected()}>

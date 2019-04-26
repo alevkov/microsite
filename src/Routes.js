@@ -1,7 +1,6 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import GalleryContainer from './containers/GalleryContainer';
-import AdminContainer from './containers/AdminContainer';
 import LoginContainer from './containers/LoginContainer';
 
 export default () =>
