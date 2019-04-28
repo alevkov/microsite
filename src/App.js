@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import {Nav, Navbar, NavItem} from 'react-bootstrap';
 import Routes from './Routes';
+import helios from './svg/helios.png';
 // styles
 import './App.css';
 // constants
@@ -28,13 +29,9 @@ class App extends React.Component {
             <div className='App container'>
                 <Navbar fluid collapseOnSelect>
                     <Navbar.Header>
-                        <Navbar.Brand>
-                            <Link to={homeRoute}>
-                                Helios
-                            </Link>
-                        </Navbar.Brand>
-                        <Navbar.Toggle>
-                        </Navbar.Toggle>
+                        <Link to={homeRoute}>
+                            <img className='logo' src={helios}/>
+                        </Link>
                     </Navbar.Header>
 
                     <Navbar.Collapse>
@@ -42,7 +39,6 @@ class App extends React.Component {
                             <NavItem onClick={this.handleEventClick}>
                                 {localStorage.getItem(constants.kEventId)}
                             </NavItem>
-
                         </Nav>
                     </Navbar.Collapse>
                 </Navbar>

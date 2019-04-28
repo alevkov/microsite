@@ -8,17 +8,22 @@
 }
 
 .container-fluid {
-    height: 100px;
+    height: 150px;
     display: flex;
     align-items: center;
+    background-color: #333333;
 }
 
+.logo {
+    height: 120px;
+    margin-right: 45em;
+}
 
 .App-header {
     background-color: #222;
     height: 170px;
     padding: 20px;
-    color: white;
+    color: #333333;
 }
 
 .App-title {
@@ -27,14 +32,6 @@
 
 .App-intro {
     font-size: large;
-}
-
-.App .navbar-brand {
-    font-weight: bold;
-    font-family: "Quicksand";
-    color: #333;
-    font-size: 45px;
-    margin-right: 15em;
 }
 
 .App .btn-success {
