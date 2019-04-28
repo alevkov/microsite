@@ -1,42 +1,52 @@
 .App {
-  text-align: center;
+    text-align: center;
 }
 
 .App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+    animation: App-logo-spin infinite 20s linear;
+    height: 80px;
+}
+
+.container-fluid {
+    height: 150px;
+    display: flex;
+    align-items: center;
+    background-color: #333333;
+}
+
+.logo {
+    height: 120px;
+    margin-right: 45em;
 }
 
 .App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+    background-color: #222;
+    height: 170px;
+    padding: 20px;
+    color: #333333;
 }
 
 .App-title {
-  font-size: 1.5em;
+    font-size: 1.5em;
 }
 
 .App-intro {
-  font-size: large;
-}
-
-.App .navbar-brand {
-  font-weight: bold;
-  font-family: "Quicksand";
-  color: #333;
+    font-size: large;
 }
 
 .App .btn-success {
-  margin: 25px;
+    margin: 25px;
 }
 
 .App ul {
-  font-family: "Quicksand";
+    font-family: "Quicksand";
 }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
